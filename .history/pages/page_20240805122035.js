@@ -1,4 +1,4 @@
-import styles from "../../styles/page.module.scss";
+import styles from "./page.module.css";
 export default function Home() {
   return (
     <main className={styles.main}>
