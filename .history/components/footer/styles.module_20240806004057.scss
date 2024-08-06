@@ -1,0 +1,23 @@
+.footer {
+    background: #f8f8f8;
+    &_container{
+        position: relative;
+        width: 100%;
+        display: grid;
+        gap: 3rem;
+        padding: 1rem;
+    }
+    img{
+        width: 140px;
+        height: 40px;
+
+    }
+    &_links{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        ul{
+            padding: 5px;
+        }
+    }
+}
