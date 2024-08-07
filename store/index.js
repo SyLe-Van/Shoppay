@@ -1,21 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
-import thunk from "redux-thunk";
-import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import cart from "./cartSlice";
+import { combineReducers } from "redux";
+
 const reducers = combineReducers({ cart });
 
-const config = {
+const persistConfig = {
   key: "root",
   storage,
 };
-const reducer = persistReducer(config, reducers);
+
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
-  reducer: reducer,
+  reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== "production",
-  middleware: [thunk],
 });
 
 console.log("Redux Store Config:", store.getState());

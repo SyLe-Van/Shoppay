@@ -15,8 +15,8 @@
            "copyright payment"
            ;
         }
-        @media (min-width: 1200px) {
-            max-width: 1200px;
+        @media (min-width: 1400px) {
+            max-width: 1500px;
         }
     }
     img{
@@ -55,9 +55,14 @@
     }
     &__socials {
         grid-area: socials;
+        margin-top: 5px;
         section {
+            h3 {
+                    margin-bottom: 10px;
+                    /* Thêm khoảng cách giữa STAY CONNECTED và các icon */
+                }
             ul {
-                margin-top: 10px;
+                
                 display: flex;
                 flex-direction: row;
                 align-items: center;

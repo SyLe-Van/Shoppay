@@ -4,7 +4,11 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 export default function Home({ country }) {
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <main className={styles.main}>
       <Header country={country} />
@@ -32,3 +36,4 @@ export async function getServerSideProps() {
     },
   };
 }
+6;
