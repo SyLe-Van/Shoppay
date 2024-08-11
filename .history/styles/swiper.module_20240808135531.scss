@@ -1,0 +1,13 @@
+@import "../styles/base.scss";
+
+
+.slideImage {
+    display: block;
+    width: 100% !important; 
+    height: 300px !important; 
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: $shadow-1;
+}
+
+

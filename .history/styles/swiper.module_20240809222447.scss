@@ -1,0 +1,33 @@
+    @import "../styles/base.scss";
+
+.swiper{
+    width: 100%;
+    height: 100%;
+    margin-left: 0 !important;
+    margin-right: auto;
+    cursor: pointer;
+    &:hover {
+        .swiper-button-prev,
+        .swiper-button-next {
+            display: grid;
+        }
+    }
+}
+.swiper.swiper-initialized .swiper-pagination .swiper-pagination-bullet {
+    width: 9px !important;
+    border-radius: 5px !important;
+}
+
+.swiper.swiper-initialized .swiper-pagination .swiper-pagination-bullet-active {
+    background: $success-color !important;
+    width: 15px !important;
+}
+
+.slideImage {
+    display: block;
+    width: 100% !important; 
+    height: 300px !important; 
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: $shadow-1;
+}

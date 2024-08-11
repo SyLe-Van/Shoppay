@@ -1,0 +1,54 @@
+@import "../../../styles/base.scss";
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    // background: #b50b0b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.swiper {
+    margin-left: 0 !important;
+    margin-right: auto;
+    cursor: pointer;
+
+    &:hover {
+
+        .swiper-button-prev,
+        .swiper-button-next {
+            display: grid;
+        }
+    }
+}
+
+.mainSwiper {
+    
+    .swiper-slide img {
+        height: 300px !important;
+        border-radius: 10px !important;
+        box-shadow: $shadow-1 !important;
+    }
+
+    .swiper-pagination-bullet {
+        width: 9px !important;
+        border-radius: 5px !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: $blue-color !important;
+        width: 13px !important;
+    }
+}
