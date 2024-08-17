@@ -80,7 +80,7 @@ export default function User() {
           >
             {userSwiperArray.map((item, index) => (
               <SwiperSlide>
-                <Link href="">
+                <Link href="" key={index}>
                   <img src={item.image} alt="" />
                 </Link>
               </SwiperSlide>

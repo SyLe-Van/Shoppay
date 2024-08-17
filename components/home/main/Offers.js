@@ -5,7 +5,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Link from "next/link";
 import "swiper/css";
 import "swiper/css/pagination";
-
 import { Navigation, Pagination } from "swiper/modules";
 
 export default function Offers() {
@@ -17,7 +16,6 @@ export default function Offers() {
         pagination={{
           clickable: true,
         }}
-        // navigation={true}
         modules={[Pagination]}
         className="offers_swiper"
       >

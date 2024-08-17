@@ -8,6 +8,7 @@ const reducers = combineReducers({ cart });
 
 const persistConfig = {
   key: "root",
+  version: 1,
   storage,
 };
 

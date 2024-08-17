@@ -1,0 +1,40 @@
+@import "../../styles/base.scss";
+.wrapper{
+    margin-top: 2rem;
+    .header{
+        height: 50px;
+        background: $yellow-color;
+        color: #fff;
+        font-size: 25px;
+        padding: 1rem 10px;
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    .product{
+       
+        &_img{
+            height: 250px;
+            img{
+                height: 250px;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+        &_infos{
+            display: flex;
+            flex-direction: column;
+            align-self: flex-start;
+            padding: 2px;
+            h1{
+                font-size: 12px;
+                font-weight: normal;
+                color: #222;
+            }
+            span{
+                color: $redish-color
+            }
+        }
+    }
+}

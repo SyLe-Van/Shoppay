@@ -29,9 +29,9 @@ export default function Menu() {
           </a>
         </li>
         <div className={styles.menu_list}>
-          {menuArray.map((item, i) => (
+          {menuArray.map((item, i, index) => (
             <li>
-              <Link href={item.link} key={i}>
+              <Link href={item.link} key={index}>
                 {i == 0 ? (
                   <GiLargeDress />
                 ) : i == 1 ? (

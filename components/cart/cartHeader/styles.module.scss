@@ -1,0 +1,18 @@
+@import '../cart.scss';
+.cart_header {
+    
+    @media (min-width: 900px) {
+        height: 140px;
+    }
+    height: 140px !important;
+}
+
+.flex {
+    gap: 1rem;
+    cursor: pointer;
+    &:hover {
+        .checkbox {
+            border-color: $blue-color;
+        }
+    }
+}

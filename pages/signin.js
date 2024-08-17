@@ -40,7 +40,6 @@ export default function SignIn({ providers, callbackUrl, csrfToken }) {
     email,
     password,
     conf_password,
-
     error,
     success,
   } = user;
