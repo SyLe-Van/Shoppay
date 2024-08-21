@@ -1,6 +1,7 @@
 import { useSession, signIn } from "next-auth/react";
 import { useState } from "react";
-// import { Rate } from "antd";
+import { Rating } from "@mui/material";
+
 import AddReview from "./AddReview";
 import Select from "./Select";
 import styles from "./styles.module.scss";
@@ -8,7 +9,7 @@ import Table from "./Table";
 
 export default function Reviews({ product }) {
   const { data: session } = useSession();
-  //   const [rating, setRating] = useState("");
+  const [rating, setRating] = useState("");
   const [reviews, setReviews] = useState(product.reviews);
   return (
     <div className={styles.reviews}>
@@ -18,24 +19,25 @@ export default function Reviews({ product }) {
           <div className={styles.reviews_stats_overview}>
             <span>Average Rating</span>
             <div className={styles.reviews_stats_overview_rating}>
-              {/* <Rate
-                allowHalf
-                disabled
-                style={{ color: "#FACF19" }}
+              <Rating
+                name="half-rating-read"
                 defaultValue={product.rating}
-              /> */}
+                precision={0.5}
+                readOnly
+                style={{ color: "#FACF19" }}
+              />
               {product.rating == 0 ? "No review yet." : product.rating}
             </div>
           </div>
           <div className={styles.reviews_stats_reviews}>
             {product.ratings.map((rating, i) => (
               <div key={i} className={styles.reviews_stats_reviews_review}>
-                {/* <Rate
-                  allowHalf
-                  disabled
-                  style={{ color: "#FACF19" }}
+                <Rating
+                  name="half-rating-read"
                   defaultValue={5 - i}
-                /> */}
+                  readOnly
+                  style={{ color: "#FACF19" }}
+                />
                 <div className={styles.bar}>
                   <div
                     className={styles.bar_inner}

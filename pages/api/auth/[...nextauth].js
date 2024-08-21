@@ -48,22 +48,31 @@ export default NextAuth({
       },
     }),
   ],
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     if (user) {
+  //       token.sub = user._id ? user._id.toString() : user.sub;
+  //       token.role = user.role || "user";
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     if (token.sub) {
+  //       const user = await User.findById(token.sub);
+  //       if (user) {
+  //         session.user.id = token.sub || user._id.toString();
+  //         session.user.role = user.role || "user";
+  //       }
+  //     }
+  //     return session;
+  //   },
+  // },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.sub = user._id ? user._id.toString() : user.sub;
-        token.role = user.role || "user";
-      }
-      return token;
-    },
     async session({ session, token }) {
-      if (token.sub) {
-        const user = await User.findById(token.sub);
-        if (user) {
-          session.user.id = token.sub || user._id.toString();
-          session.user.role = user.role || "user";
-        }
-      }
+      let user = await User.findById(token.sub);
+      session.user.id = token.sub || user._id.toSting();
+      session.user.role = user.role || "user";
+      token.role = user.role || "user";
       return session;
     },
   },
@@ -84,5 +93,6 @@ const SignInUser = async ({ password, user }) => {
   if (!isPasswordCorrect) {
     throw new Error("Email or password is incorrect");
   }
-  return { sub: user._id.toString(), ...user._doc };
+  // return { sub: user._id.toString(), ...user._doc };
+  return user;
 };

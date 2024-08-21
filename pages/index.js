@@ -25,6 +25,7 @@ export default function Home({ country, products }) {
   const { data: session } = useSession();
   const isMedium = useMediaQuery({ query: "(max-width: 850px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 550px)" });
+  console.log("session-home", session);
   return (
     <>
       <Header country={country} />

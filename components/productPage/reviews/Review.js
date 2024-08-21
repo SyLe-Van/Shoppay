@@ -1,4 +1,3 @@
-// import { Rate } from "antd";
 import styles from "./styles.module.scss";
 import { AiOutlineLike } from "react-icons/ai";
 import Rating from "@mui/material/Rating";
@@ -14,12 +13,13 @@ export default function Review({ review }) {
           <img src={image} alt="" />
         </div>
         <div className={styles.review_review}>
-          {/* <Rate
+          <Rating
+            name="half-rating-read"
             value={review.rating}
             precision={0.5}
-            disabled
+            readOnly
             style={{ color: "#facf19" }}
-          /> */}
+          />
           <Rating
             name="half-rating-read"
             value={review.rating}

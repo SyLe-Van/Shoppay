@@ -17,7 +17,7 @@ router.post(async (req, res) => {
       paymentMethod,
       total,
     }).save();
-    db.dbDisconnect();
+    // db.dbDisconnect();
     return res.json({
       message: "Order created successfully !",
       order_id: newOrder._id,
