@@ -8,8 +8,9 @@ import Auth0Provider from "next-auth/providers/auth0";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "../../../models/User";
 import bcrypt from "bcrypt";
-import db from "../../../utils/db";
-db.dbConnect();
+import dbConnect from "../../../utils/db";
+dbConnect();
+
 export default NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   providers: [
@@ -32,41 +33,25 @@ export default NextAuth({
     }),
     CredentialsProvider({
       name: "Credentials",
-
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const email = credentials.email;
-        const password = credentials.password;
+        const { email, password } = credentials;
         const user = await User.findOne({ email });
-        if (user) {
-          return SignInUser({ password, user });
+        if (user && (await bcrypt.compare(password, user.password))) {
+          return {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
         }
-        throw new Error("This email is not registered");
+        return null;
       },
     }),
   ],
-  // callbacks: {
-  //   async jwt({ token, user }) {
-  //     if (user) {
-  //       token.sub = user._id ? user._id.toString() : user.sub;
-  //       token.role = user.role || "user";
-  //     }
-  //     return token;
-  //   },
-  //   async session({ session, token }) {
-  //     if (token.sub) {
-  //       const user = await User.findById(token.sub);
-  //       if (user) {
-  //         session.user.id = token.sub || user._id.toString();
-  //         session.user.role = user.role || "user";
-  //       }
-  //     }
-  //     return session;
-  //   },
-  // },
   callbacks: {
     async session({ session, token }) {
       let user = await User.findById(token.sub);
@@ -81,18 +66,18 @@ export default NextAuth({
   },
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.JWT_SECRET,
 });
 
 const SignInUser = async ({ password, user }) => {
   if (!user.password) {
-    throw new Error("Please enter your password");
+    throw new Error("Please enter your password.");
   }
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  if (!isPasswordCorrect) {
-    throw new Error("Email or password is incorrect");
+  const testPassword = await bcrypt.compare(password, user.password);
+  if (!testPassword) {
+    throw new Error("Email or password is wrong!");
   }
-  // return { sub: user._id.toString(), ...user._doc };
   return user;
 };

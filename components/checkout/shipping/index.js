@@ -110,55 +110,61 @@ export default function Shipping({
         <h3>Shipping Address</h3>
       </div>
       <div className={styles.addresses}>
-        {addresses.map((address) => (
-          <div style={{ position: "relative" }}>
-            <div
-              className={styles.address_delete}
-              onClick={() => deleteHandler(address._id)}
-            >
-              <IoIosRemoveCircleOutline />
-            </div>
-            <div
-              className={`${styles.address} ${address.active && styles.active}`}
-              key={address._id}
-              onClick={() => changeActiveHandler(address._id)}
-            >
-              <div className={styles.address_side}>
-                <img src={user.image} alt="" />
-              </div>
-              <div className={styles.address_col}>
-                <span>
-                  <FaIdCard />
-                  {address.firstName.toUpperCase()}{" "}
-                  {address.lastName.toUpperCase()}
-                </span>
-                <span>
-                  <GiPhone />
-                  {address.phoneNumber}
-                </span>
-              </div>
-              <div className={styles.address_col}>
-                <span>
-                  <FaMapMarkedAlt />
-                  {address.address1}
-                </span>
-                <span>{address.address2}</span>
-                <span>
-                  {address.city}, {address.state}, {address.country}
-                </span>
-                <span>{address.zipCode}</span>
-              </div>
-              <span
-                className={styles.active_text}
-                style={{
-                  display: `${!address.active && "none"}`,
-                }}
+        {Array.isArray(addresses) && addresses.length > 0 ? (
+          addresses.map((address) => (
+            <div key={address._id} style={{ position: "relative" }}>
+              <div
+                className={styles.address_delete}
+                onClick={() => deleteHandler(address._id)}
               >
-                Active
-              </span>
+                <IoIosRemoveCircleOutline />
+              </div>
+              <div
+                className={`${styles.address} ${
+                  address.active && styles.active
+                }`}
+                key={address._id}
+                onClick={() => changeActiveHandler(address._id)}
+              >
+                <div className={styles.address_side}>
+                  <img src={user.image} alt="" />
+                </div>
+                <div className={styles.address_col}>
+                  <span>
+                    <FaIdCard />
+                    {address.firstName.toUpperCase()}{" "}
+                    {address.lastName.toUpperCase()}
+                  </span>
+                  <span>
+                    <GiPhone />
+                    {address.phoneNumber}
+                  </span>
+                </div>
+                <div className={styles.address_col}>
+                  <span>
+                    <FaMapMarkedAlt />
+                    {address.address1}
+                  </span>
+                  <span>{address.address2}</span>
+                  <span>
+                    {address.city}, {address.state}, {address.country}
+                  </span>
+                  <span>{address.zipCode}</span>
+                </div>
+                <span
+                  className={styles.active_text}
+                  style={{
+                    display: `${!address.active && "none"}`,
+                  }}
+                >
+                  Active
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No addresses found.</p>
+        )}
       </div>
       <button className={styles.hide_show} onClick={() => setVisible(!visible)}>
         {visible ? (

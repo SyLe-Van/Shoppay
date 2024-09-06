@@ -45,8 +45,7 @@ export default function MultipleSelect({
   ...rest
 }) {
   const [subs, setSubs] = useState(data || []);
-  const [field, meta] = useField(name);
-  console.log("meta", meta);
+  const [field, meta] = useField({ name, ...rest });
   useEffect(() => {
     setSubs(data);
   }, [data]);
@@ -80,7 +79,7 @@ export default function MultipleSelect({
     <div>
       <div
         className={`${styles.header} ${
-          meta.error && meta.error[name] ? styles.header_error : ""
+          meta.error && meta.error[name] ? styles.header__error : ""
         }`}
       >
         <div className={styles.flex}>
@@ -90,8 +89,8 @@ export default function MultipleSelect({
           {header}
         </div>
         <span>
-          {meta.touched && meta.error && meta.error.subCategories && (
-            <div className={styles.error_msg}>
+          {meta.touched && meta.error && meta.error[name] && (
+            <div className={styles.error__msg}>
               <span></span>
               <ErrorMessage name={name} />
             </div>
@@ -108,7 +107,7 @@ export default function MultipleSelect({
           value={value}
           onChange={handleChange}
           name={name}
-          disabled={disabled === "true" || disabled === true}
+          disabled={disabled}
           input={<Input id="select-multiple-chip" />}
           renderValue={(selected) => (
             <div className={classes.chips}>

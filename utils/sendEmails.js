@@ -37,7 +37,7 @@ export const sendEmail = async (to, url, txt, subject, template) => {
         accessToken,
       },
     });
-
+    
     const mailOptions = {
       from: SENDER_EMAIL_ADDRESS,
       to: to,

@@ -4,12 +4,13 @@ import auth from "../../../middleware/auth";
 import admin from "../../../middleware/admin";
 import Coupon from "../../../models/Coupon";
 import slugify from "slugify";
+import dbConnect from "../../../utils/db";
 const router = createRouter().use(auth, admin);
 
 router.post(async (req, res) => {
   try {
     const { coupon, discount, startDate, endDate } = req.body;
-    db.dbConnect();
+    await dbConnect();
     const test = await Coupon.findOne({ coupon });
     if (test) {
       return res
@@ -24,7 +25,6 @@ router.post(async (req, res) => {
       coupons: await Coupon.find({}).sort({ updatedAt: -1 }),
     });
   } catch (error) {
-    db.dbDisconnect();
     res.status(500).json({ message: error.message });
   }
 });
@@ -32,7 +32,7 @@ router.post(async (req, res) => {
 router.delete(async (req, res) => {
   try {
     const { id } = req.body;
-    db.dbConnect();
+    await dbConnect();
     await Coupon.deleteOne({ _id: id });
     // db.disconnectDb();
     return res.json({
@@ -46,7 +46,7 @@ router.delete(async (req, res) => {
 router.put(async (req, res) => {
   try {
     const { id, coupon, discount, startDate, endDate } = req.body;
-    db.dbConnect();
+    await dbConnect();
     await Coupon.findByIdAndUpdate(id, {
       coupon,
       discount,

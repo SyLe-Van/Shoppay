@@ -12,7 +12,7 @@ import {
   usePayPalScriptReducer,
   PayPalButtons,
 } from "@paypal/react-paypal-js";
-
+import dbConnect from "../../utils/db";
 function reducer(state, action) {
   switch (action.type) {
     case "PAY_REQUEST":
@@ -231,7 +231,7 @@ export default function OrderPage({
             {/* Payment Actions Section */}
             <div className={styles.order_actions}>
               <div className={styles.order_address}>
-                <h1>Customer's Order</h1>
+                <h1>Customer&apos;s Order</h1>
                 <div className={styles.order_address_user}>
                   <div className={styles.order_address_user_infos}>
                     <img src={orderData.user.image} alt="" />
@@ -301,20 +301,29 @@ export default function OrderPage({
 }
 
 export async function getServerSideProps(context) {
-  db.dbConnect();
-  const { query } = context;
-  const id = query.id;
-  const order = await Order.findById(id)
-    .populate({ path: "user", model: User })
-    .lean();
-  let paypal_client_id = process.env.PAYPAL_CLIENT_ID;
-  let stripe_public_key = process.env.STRIPE_PUBLIC_KEY;
-  // db.dbDisconnect();
-  return {
-    props: {
-      orderData: JSON.parse(JSON.stringify(order)),
-      paypal_client_id,
-      stripe_public_key,
-    },
-  };
+  try {
+    await dbConnect();
+    const { query } = context;
+    const id = query.id;
+    const order = await Order.findById(id)
+      .populate({ path: "user", model: User })
+      .lean();
+    let paypal_client_id = process.env.PAYPAL_CLIENT_ID;
+    let stripe_public_key = process.env.STRIPE_PUBLIC_KEY;
+
+    return {
+      props: {
+        orderData: JSON.parse(JSON.stringify(order)),
+        paypal_client_id,
+        stripe_public_key,
+      },
+    };
+  } catch (error) {
+    console.error("Error in getServerSideProps:", error);
+    return {
+      props: {
+        error: "An error occurred while fetching the order data.",
+      },
+    };
+  }
 }

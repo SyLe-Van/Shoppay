@@ -39,7 +39,7 @@ router.post(async (req, res) => {
     });
     const url = `${process.env.BASE_URL}/activate/${activation_token}`;
     sendEmail(email, url, "", "Activate your account", activateEmailTemplate);
-    await db.dbDisconnect();
+    // await db.dbDisconnect();
     res.status(200).json({
       message: "User registered successfully. Please activate your account",
     });

@@ -4,6 +4,7 @@ import db from "../../../../utils/db";
 import Product from "../../../../models/Products";
 import Category from "../../../../models/Category";
 import ProductCard from "../../../../components/admin/product/productCard";
+import dbConnect from "../../../../utils/db";
 export default function all({ products }) {
   console.log(products);
   return (
@@ -17,7 +18,7 @@ export default function all({ products }) {
 }
 
 export async function getServerSideProps(ctx) {
-  await db.dbConnect();
+  await dbConnect();
   const products = await Product.find({})
     .populate({ path: "category", model: Category })
     .sort({ createdAt: -1 })

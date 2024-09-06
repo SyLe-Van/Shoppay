@@ -1,13 +1,13 @@
 import { createRouter } from "next-connect";
-import db from "../../../utils/db";
 import User from "../../../models/User";
 import auth from "../../../middleware/auth";
 import Order from "../../../models/Order";
+import dbConnect from "../../../utils/db";
 const router = createRouter().use(auth);
 
 router.post(async (req, res) => {
   try {
-    db.dbConnect();
+    await dbConnect();
     const { products, shippingAddress, paymentMethod, total } = req.body;
     const user = await User.findById(req.user);
     const newOrder = await new Order({
@@ -17,7 +17,7 @@ router.post(async (req, res) => {
       paymentMethod,
       total,
     }).save();
-    // db.dbDisconnect();
+
     return res.json({
       message: "Order created successfully !",
       order_id: newOrder._id,

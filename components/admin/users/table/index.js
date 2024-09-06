@@ -23,6 +23,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import styles from "./styles.module.scss";
 import { RiDeleteBin7Fill } from "react-icons/ri";
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -272,6 +273,27 @@ export default function EnhancedTable({ rows }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleDeleteUser = async (userId) => {
+    try {
+      const response = await fetch("/api/admin/users", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: userId }),
+      });
+
+      if (response.ok) {
+        const updatedRows = rows.filter((row) => row._id !== userId);
+        setRows(updatedRows);
+      } else {
+        console.error("Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -363,7 +385,14 @@ export default function EnhancedTable({ rows }) {
                         )}
                       </TableCell>
                       <TableCell align="right">
-                        <RiDeleteBin7Fill />
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteUser(row._id);
+                          }}
+                        >
+                          <RiDeleteBin7Fill />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );

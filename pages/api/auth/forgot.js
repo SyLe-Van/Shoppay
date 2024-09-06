@@ -21,7 +21,7 @@ router.post(async (req, res) => {
     });
     const url = `${process.env.BASE_URL}/auth/reset/${user_id}`;
     sendEmail(email, url, "", "Reset your password", resetEmailTemplate);
-    await db.dbDisconnect();
+    // await db.dbDisconnect();
     res.status(200).json({
       message:
         "An email has been sent to your email address, use the link to reset your password",

@@ -8,6 +8,9 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(process.cwd(), "styles")],
   },
+  env: {
+    MONGODB_URL: process.env.MONGODB_URL,
+  },
 };
 
 export default nextConfig;

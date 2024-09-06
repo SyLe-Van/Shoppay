@@ -1,5 +1,5 @@
 import { createRouter } from "next-connect";
-import db from "../../../utils/db";
+import dbConnect from "../../../utils/db";
 import User from "../../../models/User";
 import auth from "../../../middleware/auth";
 import Coupon from "../../../models/Coupon";
@@ -8,7 +8,7 @@ const router = createRouter().use(auth);
 
 router.post(async (req, res) => {
   try {
-    db.dbConnect();
+    await dbConnect();
     const { coupon } = req.body;
     const user = User.findById(req.user);
     const checkCoupon = await Coupon.findOne({ coupon });
@@ -26,7 +26,7 @@ router.post(async (req, res) => {
       discount: checkCoupon.discount,
     });
 
-    db.dbDisconnect();
+    // db.dbDisconnect();
     return res.json({ message: "Coupon applied successfully !" });
   } catch (error) {
     return res.status(500).json({ message: error.message });

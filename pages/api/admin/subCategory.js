@@ -9,7 +9,7 @@ const router = createRouter().use(auth, admin);
 router.post(async (req, res) => {
   try {
     const { name, parent } = req.body;
-    db.dbConnect();
+    await dbConnect();
     const test = await SubCategory.findOne({ name });
     if (test) {
       return res
@@ -31,9 +31,9 @@ router.post(async (req, res) => {
 router.delete(async (req, res) => {
   try {
     const { id } = req.body;
-    db.dbConnect();
+    await dbConnect();
     await SubCategory.deleteOne({ _id: id });
-    // db.disconnectDb();
+
     return res.json({
       message: "SubCategory has been deleted successfuly",
       subCategories: await SubCategory.find({}).sort({ updatedAt: -1 }),
@@ -45,13 +45,13 @@ router.delete(async (req, res) => {
 router.put(async (req, res) => {
   try {
     const { id, name, parent } = req.body;
-    db.dbConnect();
+    await dbConnect();
     await SubCategory.findByIdAndUpdate(id, {
       name,
       parent,
       slug: slugify(name),
     });
-    // db.disconnectDb();
+
     return res.json({
       message: "SubCategory has been updated successfuly",
       subCategories: await SubCategory.find({}).sort({ createdAt: -1 }),
@@ -67,7 +67,7 @@ router.get(async (req, res) => {
     if (!category) {
       return res.json([]);
     }
-    db.dbConnect();
+    await dbConnect();
     const results = await SubCategory.find({ parent: category }).select("name");
     console.log(results);
     // db.dbDisconnect();

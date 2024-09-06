@@ -3,6 +3,7 @@ import db from "../../../utils/db";
 import Category from "../../../models/Category";
 import SubCategory from "../../../models/SubCategory";
 import { useState } from "react";
+import dbConnect from "../../../utils/dbConnect";
 import Create from "../../../components/admin/subCategories/Create";
 import List from "../../../components/admin/subCategories/List";
 export default function subCategories({ categories, subCategories }) {
@@ -23,7 +24,7 @@ export default function subCategories({ categories, subCategories }) {
 }
 
 export async function getServerSideProps(context) {
-  db.dbConnect();
+  await dbConnect();
   const categories = await Category.find({}).sort({ updatedAt: -1 }).lean();
   const subCategories = await SubCategory.find({})
     .populate({ path: "parent", model: Category })

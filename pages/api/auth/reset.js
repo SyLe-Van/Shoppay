@@ -19,7 +19,7 @@ router.put(async (req, res) => {
 
     await user.updateOne({ password: await bcrypt.hash(password, 12) });
     res.json({ email: user.email, message: "Password updated successfully" });
-    await db.dbDisconnect();
+    // await db.dbDisconnect();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

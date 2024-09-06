@@ -1,11 +1,12 @@
 import { createRouter } from "next-connect";
 import db from "../../../../utils/db";
 import Product from "../../../../models/Products";
+import dbConnect from "../../../../utils/db";
 const router = createRouter();
 
 router.get(async (req, res) => {
   try {
-    db.dbConnect();
+    await dbConnect();
     const id = req.query.id;
     const style = req.query.style || 0;
     const size = req.query.size || 0;

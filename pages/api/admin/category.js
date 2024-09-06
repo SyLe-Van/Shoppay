@@ -5,12 +5,13 @@ import auth from "../../../middleware/auth";
 import admin from "../../../middleware/admin";
 import Category from "../../../models/Category";
 import slugify from "slugify";
+import dbConnect from "../../../utils/db";
 const router = createRouter().use(auth, admin);
 
 router.post(async (req, res) => {
   try {
     const { name } = req.body;
-    db.dbConnect();
+    await dbConnect();
     const test = await Category.findOne({ name });
     if (test) {
       return res
@@ -25,14 +26,13 @@ router.post(async (req, res) => {
       categories: await Category.find({}).sort({ updatedAt: -1 }),
     });
   } catch (error) {
-    db.dbDisconnect();
     res.status(500).json({ message: error.message });
   }
 });
 router.delete(async (req, res) => {
   try {
     const { id } = req.body;
-    db.dbConnect();
+    await dbConnect();
     await Category.deleteOne({ _id: id });
     // db.dbDisconnect();
     return res.json({
@@ -46,7 +46,7 @@ router.delete(async (req, res) => {
 router.put(async (req, res) => {
   try {
     const { id, name } = req.body;
-    db.dbConnect();
+    await dbConnect();
     await Category.findByIdAndUpdate(id, { name });
     // db.dbDisconnect();
     return res.json({

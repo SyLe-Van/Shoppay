@@ -6,6 +6,7 @@ import Category from "../../../../models/Category";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import dbConnect from "../../../../utils/db";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import SingularSelect from "../../../../components/selects/SingularSelect";
@@ -23,6 +24,7 @@ import Questions from "../../../../components/admin/createProduct/clickToAdd/Que
 import { validateCreateProduct } from "../../../../utils/validation";
 import dataURItoBlob from "../../../../utils/dataURItoBlob";
 import { uploadImages } from "../../../../requests/upload";
+import { useRouter } from "next/router";
 const initialState = {
   name: "",
   description: "",
@@ -67,41 +69,62 @@ export default function create({ parents, categories }) {
   const [description_images, setDescription_images] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
   console.log(product);
   useEffect(() => {
     const getParentData = async () => {
-      const { data } = await axios.get(`/api/product/${product.parent}`);
-      console.log(data);
-      if (data) {
-        setProduct({
-          ...product,
-          name: data.name,
-          description: data.description,
-          brand: data.brand,
-          category: data.category,
-          subCategories: data.subCategories,
-          questions: [],
-          details: [],
-        });
+      if (product.parent) {
+        try {
+          const { data } = await axios.get(`/api/product/${product.parent}`);
+          if (data.success) {
+            setProduct({
+              ...product,
+              name: data.data.name,
+              description: data.data.description,
+              brand: data.data.brand,
+              category: data.data.category,
+              subCategories: data.data.subCategories,
+              questions: [],
+              details: [],
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching parent data:", error);
+        }
       }
     };
     getParentData();
   }, [product.parent]);
   useEffect(() => {
     async function getSubs() {
-      const { data } = await axios.get("/api/admin/subCategory", {
-        params: {
-          category: product.category,
-        },
-      });
-      console.log(data);
-      setSubs(data);
+      if (product.category) {
+        try {
+          const { data } = await axios.get("/api/admin/subCategory", {
+            params: {
+              category: product.category,
+            },
+          });
+          setSubs(data);
+        } catch (error) {
+          console.error("Error fetching subcategories:", error);
+          setSubs([]);
+        }
+      } else {
+        setSubs([]);
+      }
     }
     getSubs();
   }, [product.category]);
   const handleChange = (e) => {
     const { value, name } = e.target;
-    setProduct({ ...product, [name]: value });
+    if (name === "subCategories") {
+      setProduct({
+        ...product,
+        [name]: Array.isArray(value) ? value : [value],
+      });
+    } else {
+      setProduct({ ...product, [name]: value });
+    }
   };
   const validate = Yup.object({
     name: Yup.string()
@@ -169,6 +192,7 @@ export default function create({ parents, categories }) {
       });
       setLoading(false);
       toast.success(data.message);
+      router.push("/admin/dashboard/product/all");
     } catch (error) {
       setLoading(false);
       toast.error(error.response.data.message);
@@ -329,6 +353,7 @@ export default function create({ parents, categories }) {
             <button
               className={`${styles.btn} ${styles.btn__primary} ${styles.submit_btn}`}
               type="submit"
+              onClick={createProductHandler}
             >
               Create Product
             </button>
@@ -340,7 +365,7 @@ export default function create({ parents, categories }) {
 }
 
 export async function getServerSideProps(ctx) {
-  db.dbConnect();
+  await dbConnect();
   const results = await Product.find().select("name subProducts").lean();
   const categories = await Category.find().lean();
   //   db.disconnectDb();

@@ -1,7 +1,7 @@
+import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import Layout from "../../components/profile/layout";
 import { ordersLinks } from "../../data/profile";
 import Order from "../../models/Order";
@@ -56,7 +56,7 @@ export default function orders({ user, tab, orders }) {
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr>
+              <tr key={order._id}>
                 <td>{order._id}</td>
                 <td className={styles.orders_images}>
                   {order.products.map((p) => (

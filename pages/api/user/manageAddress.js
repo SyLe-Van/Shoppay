@@ -29,7 +29,7 @@ router.put(async (req, res) => {
       { new: true }
     );
     console.log("Address updated:", addresses);
-    db.dbDisconnect();
+    // db.dbDisconnect();
     return res.json({ addresses });
   } catch (error) {
     return res.status(500).json({ message: error.message });

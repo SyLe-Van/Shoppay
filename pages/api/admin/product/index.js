@@ -1,14 +1,15 @@
 import { createRouter } from "next-connect";
-import db from "../../../utils/db";
-import Product from "../../../models/Products";
-import auth from "../../../middleware/auth";
-import admin from "../../../middleware/admin";
+
+import Product from "../../../../models/Products";
+import auth from "../../../../middleware/auth";
+import admin from "../../../../middleware/admin";
 import slugify from "slugify";
+import dbConnect from "../../../../utils/db";
 const router = createRouter().use(auth, admin);
 
 router.post(async (req, res) => {
   try {
-    db.dbConnect();
+    await dbConnect();
     if (req.body.parent) {
       const parent = await Product.findById(req.body.parent);
       if (!parent) {
@@ -55,7 +56,6 @@ router.post(async (req, res) => {
       await newProduct.save();
       res.status(200).json({ message: "Product created Successfully." });
     }
-    // db.disconnectDb();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

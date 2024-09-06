@@ -16,7 +16,7 @@ router.post(async (req, res) => {
       },
     });
     console.log("Address saved:", address);
-    db.dbDisconnect();
+    // db.dbDisconnect();
     return res.json({ addresses: user.address });
   } catch (error) {
     return res.status(500).json({ message: error.message });

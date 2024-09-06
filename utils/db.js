@@ -1,37 +1,38 @@
 import mongoose from "mongoose";
-const connection = {};
+
+const MONGODB_URL = process.env.MONGODB_URL;
+console.log("MONGODB_URL:", MONGODB_URL);
+
+if (!MONGODB_URL) {
+  throw new Error(
+    "Please define the MONGODB_URL environment variable inside .env.local"
+  );
+}
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 async function dbConnect() {
-  if (connection.isConnected) {
-    console.log("Already connected to the database.");
-    return;
-  }
-  if (mongoose.connections.length > 0) {
-    connection.isConnected = mongoose.connections[0].readyState;
-    if (connection.isConnected === 1) {
-      console.log("Use previous connection.");
-      return;
-    }
-    await mongoose.disconnect();
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  const db = await mongoose.connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  console.log("New connection to the database.");
-  connection.isConnected = db.connections[0].readyState;
+  if (!cached.promise) {
+    const opts = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
+
+    cached.promise = mongoose.connect(MONGODB_URL, opts).then((mongoose) => {
+      return mongoose;
+    });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
-async function dbDisconnect() {
-  if (connection.isConnected) {
-    if (mongoose.connections[0].readyState) {
-      await mongoose.disconnect();
-      console.log("Disconnecting from the database.");
-      connection.isConnected = false;
-    }
-  }
-}
-
-const db = { dbConnect, dbDisconnect };
-export default db;
+export default dbConnect;

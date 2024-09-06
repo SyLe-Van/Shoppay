@@ -4,6 +4,7 @@ import Category from "../../../models/Category";
 import { useState } from "react";
 import Create from "../../../components/admin/categories/Create";
 import List from "../../../components/admin/categories/List";
+import dbConnect from "../../../utils/db";
 export default function categories({ categories }) {
   const [data, setData] = useState(categories);
 
@@ -18,7 +19,7 @@ export default function categories({ categories }) {
 }
 
 export async function getServerSideProps(context) {
-  db.dbConnect();
+  await dbConnect();
   const categories = await Category.find({}).sort({ updatedAt: -1 }).lean();
   return {
     props: {

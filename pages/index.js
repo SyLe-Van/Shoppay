@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import Main from "../components/home/main";
 import FlashDeals from "../components/home/flashDeals";
 import Category from "../components/home/category";
-import db from "../utils/db";
+import dbConnect from "../utils/db";
 import Product from "../models/Products";
 import {
   women_accessories,
@@ -73,7 +73,7 @@ export default function Home({ country, products }) {
 }
 
 export async function getServerSideProps() {
-  db.dbConnect();
+  await dbConnect();
   let products = await Product.find().sort({ createdAt: -1 }).lean();
   let data = await axios
     .get("https://api.ipregistry.co/?key=lc424motdfemedh1")

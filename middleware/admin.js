@@ -1,13 +1,14 @@
 import { getToken } from "next-auth/jwt";
 import User from "../models/User";
-import db from "../utils/db";
+import dbConnect from "../utils/db";
+
 export default async (req, res, next) => {
   const token = await getToken({
     req,
     secret: process.env.JWT_SECRET,
     secureCookie: process.env.NODE_ENV === "production",
   });
-  db.dbConnect();
+  await dbConnect();
   let user = await User.findById(token.sub);
   //   db.dbDisconnect();
   if (user.role == "admin") {

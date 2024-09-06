@@ -11,7 +11,7 @@ import { useState } from "react";
 import MainSwiper from "../../components/productPage/mainSwiper";
 import Infos from "../../components/productPage/infos";
 import Reviews from "../../components/productPage/reviews";
-
+import dbConnect from "../../utils/db";
 export default function product({ product }) {
   const [activeImg, setActiveImg] = useState("");
 
@@ -26,7 +26,7 @@ export default function product({ product }) {
           <div className={styles.path}>
             Home / {product.category.name}/{" "}
             {product.subCategories.map((sub) => (
-              <span>/{sub.name}</span>
+              <span key={sub.name}>/{sub.name}</span>
             ))}
           </div>
           <div className={styles.product_main}>
@@ -45,7 +45,7 @@ export async function getServerSideProps(context) {
   const slug = query.slug;
   const style = query.style;
   const size = query.size || 0;
-  db.dbConnect();
+  await dbConnect();
   let product = await Product.findOne({ slug })
     .populate({ path: "category", model: Category })
     .populate({ path: "subCategories", model: SubCategory })

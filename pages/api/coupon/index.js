@@ -21,7 +21,7 @@ router.post(async (req, res) => {
       discount,
     }).save();
 
-    db.dbDisconnect();
+    // db.dbDisconnect();
     return res.json({
       message: "Coupon created successfully !",
       coupons: await Coupon.find({}),

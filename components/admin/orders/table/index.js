@@ -97,26 +97,28 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow key={row.user.id}>
+                  <TableRow key={row.user?._id || row._id}>
                     <TableCell component="th" scope="row">
                       <img
-                        src={row.user.image}
+                        src={row.user?.image || "/default-user-image.png"}
                         className={styles.table_img}
                         alt=""
                       />
                     </TableCell>
-                    <TableCell>{row.user.name}</TableCell>
-                    <TableCell align="left">{row.user.email}</TableCell>
+                    <TableCell>{row.user?.name || "N/A"}</TableCell>
+                    <TableCell align="left">
+                      {row.user?.email || "N/A"}
+                    </TableCell>
                     <TableCell align="right">
-                      {row.shippingAddress.firstName}{" "}
-                      {row.shippingAddress.lastName} <br />
-                      {row.shippingAddress.address1} <br />
-                      {row.shippingAddress.address2} <br />
-                      {row.shippingAddress.state},{row.shippingAddress.city}{" "}
-                      <br />
-                      {row.shippingAddress.country} <br />
-                      {row.shippingAddress.zipCode} <br />
-                      {row.shippingAddress.phoneNumber} <br />
+                      {row.shippingAddress?.firstName || "N/A"}{" "}
+                      {row.shippingAddress?.lastName || "N/A"} <br />
+                      {row.shippingAddress?.address1 || "N/A"} <br />
+                      {row.shippingAddress?.address2 || "N/A"} <br />
+                      {row.shippingAddress?.state || "N/A"},
+                      {row.shippingAddress?.city || "N/A"} <br />
+                      {row.shippingAddress?.country || "N/A"} <br />
+                      {row.shippingAddress?.zipCode || "N/A"} <br />
+                      {row.shippingAddress?.phoneNumber || "N/A"} <br />
                     </TableCell>
                   </TableRow>
                 </TableBody>
